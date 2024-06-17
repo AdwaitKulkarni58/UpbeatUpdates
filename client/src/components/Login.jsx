@@ -13,16 +13,17 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import axios from "axios";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { login } from "../slices/userSlice";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, password);
     try {
       const user = { email, password };
       const response = await axios.post(
@@ -30,7 +31,9 @@ const Login = () => {
         user
       );
       dispatch(login(user));
-      console.log(response.data);
+      if (response.status === 200) {
+        navigate("/content");
+      }
     } catch (err) {
       console.log(err);
     }
