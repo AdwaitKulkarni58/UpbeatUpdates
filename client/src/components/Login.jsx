@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Avatar,
   Button,
@@ -11,16 +11,31 @@ import {
   Typography,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { login } from "../slices/userSlice";
 
 const Login = () => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(email, password);
+    try {
+      const user = { email, password };
+      const response = await axios.post(
+        "http://localhost:3000/users/login",
+        user
+      );
+      dispatch(login(user));
+      console.log(response.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
+
   return (
     <Box
       sx={{
@@ -56,6 +71,7 @@ const Login = () => {
           type="email"
           autoComplete="email"
           autoFocus
+          onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
           margin="normal"
@@ -66,6 +82,7 @@ const Login = () => {
           type="password"
           id="password"
           autoComplete="current-password"
+          onChange={(e) => setPassword(e.target.value)}
         />
         <FormControlLabel
           control={<Checkbox value="remember" color="primary" />}
@@ -77,17 +94,12 @@ const Login = () => {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          Sign In
+          Submit
         </Button>
         <Grid container>
           <Grid item xs>
             <Link href="#" variant="body2" sx={{ fontWeight: "bold" }}>
               Forgot password?
-            </Link>
-          </Grid>
-          <Grid item>
-            <Link href="#" variant="body2" sx={{ fontWeight: "bold" }}>
-              "Don't have an account? Sign Up"
             </Link>
           </Grid>
         </Grid>
