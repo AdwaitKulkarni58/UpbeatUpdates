@@ -35,7 +35,7 @@ const Login = () => {
         navigate("/content");
       }
     } catch (err) {
-      console.log(err);
+      alert("Please enter the correct credentials");
     }
   };
 
@@ -56,7 +56,7 @@ const Login = () => {
         <LockOutlinedIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
-        Sign in
+        Log in / Register
       </Typography>
       <Box
         component="form"

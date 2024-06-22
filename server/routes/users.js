@@ -66,4 +66,43 @@ router.post("/login", async function (req, res, next) {
   }
 });
 
+/* PUT email and password */
+router.put("/:email", async (req, res) => {
+  const { email, password } = req.body;
+  const { email: oldEmail } = req.params;
+
+  try {
+    const user = await User.findOne({ email: oldEmail });
+
+    if (user) {
+      const salt = await bcrypt.genSalt(10);
+      const pass = await bcrypt.hash(password, salt);
+
+      user.email = email;
+      user.password = pass;
+
+      user.save();
+
+      res.send(email);
+    } else {
+      res.status(400).json({ msg: "User not found" });
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
+/* DELETE user account */
+router.delete("/:email", async (req, res) => {
+  const { email } = req.params;
+  try {
+    await User.deleteOne({ email: email });
+    res.send(`Account for ${email} deleted successfully`);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
 module.exports = router;

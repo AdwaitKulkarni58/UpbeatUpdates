@@ -35,9 +35,9 @@ function Navbar(props) {
   };
 
   let navItems = [];
-  if (location.pathname === "/account") {
+  if (location.pathname === "/account" || location.pathname === "/account/faves") {
     navItems = [{ label: "Home", path: "/content" }];
-  } else if (loggedIn) {
+  } else if (loggedIn || location.pathname === "/content") {
     navItems = [{ label: "Profile", path: "/account" }];
   }
 
