@@ -8,6 +8,12 @@ import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Modal from "@mui/material/Modal";
+import axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
+import Divider from "@mui/material/Divider";
+import CloseIcon from "@mui/icons-material/Close";
+import { IconButton } from "@mui/material";
 
 const categories = [
   "Business",
@@ -22,7 +28,7 @@ const categories = [
 const darkTheme = createTheme({
   palette: { mode: "dark" },
   typography: {
-    fontFamily: "Roboto, sans-serif",
+    fontFamily: "Times New Roman, sans-serif",
     h1: {
       fontSize: "2.5rem",
       fontWeight: "bold",
@@ -60,9 +66,26 @@ const CategoryItem = styled(Paper)(({ theme }) => ({
   },
 }));
 
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "80%",
+  maxHeight: "80vh",
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+  overflow: "auto",
+};
+
 export default function Content() {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
+  const [open, setOpen] = React.useState(false);
+  const [news, setNews] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const [selectedCategory, setSelectedCategory] = React.useState("");
 
   React.useEffect(() => {
     if (!user.loggedIn) {
@@ -70,10 +93,31 @@ export default function Content() {
     }
   }, [user.loggedIn, navigate]);
 
-  const handleCategoryClick = (category) => {
-    console.log(`Category clicked: ${category}`);
-    // For example, fetch news for this category and display it
-    // navigate(`/news/${category}`);
+  const handleCategoryClick = async (category) => {
+    setSelectedCategory(category);
+    setOpen(true);
+    setLoading(true);
+
+    try {
+      const response = await axios.get(`https://newsapi.org/v2/top-headlines`, {
+        params: {
+          category: category.toLowerCase(),
+          apiKey: import.meta.env.VITE_API_KEY,
+          language: "en",
+        },
+      });
+
+      setNews(response.data.articles.slice(0, 10));
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching news:", error);
+      setLoading(false);
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setNews([]);
   };
 
   return (
@@ -106,6 +150,62 @@ export default function Content() {
           </Box>
         </ThemeProvider>
       </Grid>
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              id="modal-modal-title"
+              variant="h4"
+              component="h2"
+              gutterBottom
+            >
+              {selectedCategory} News
+            </Typography>
+            <IconButton onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          {loading ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          ) : (
+            news.map((article, index) => (
+              <Box key={index} mb={3}>
+                <Typography variant="h6" gutterBottom>
+                  {article.title}
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                  {article.description}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {article.source.name}
+                </Typography>
+                <Divider sx={{ my: 2 }} />
+              </Box>
+            ))
+          )}
+        </Box>
+      </Modal>
     </>
   );
 }
