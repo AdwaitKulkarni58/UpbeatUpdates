@@ -16,17 +16,40 @@ const connect = () => {
 
 connect();
 
-const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
+const userSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    savedArticles: [
+      {
+        title: {
+          type: String,
+          required: true,
+        },
+        description: {
+          type: String,
+          required: true,
+        },
+        url: {
+          type: String,
+          required: true,
+        },
+        source: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
-  password: {
-    type: String,
-    required: true,
-  },
-});
+  { _id: false }
+);
 
 const User = mongoose.model("User", userSchema);
 
@@ -89,6 +112,68 @@ router.put("/:email", async (req, res) => {
     }
   } catch (err) {
     console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
+/* POST saved article */
+router.post("/:email/articles", async (req, res) => {
+  const { email } = req.params;
+  const { article } = req.body;
+  console.log(`Saving article for email: ${email}`);
+
+  if (
+    !article ||
+    !article.title ||
+    !article.description ||
+    !article.url ||
+    !article.source
+  ) {
+    return res.status(400).json({ msg: "Invalid article data" });
+  }
+  try {
+    const user = await User.findOne({ email: email });
+    if (user) {
+      user.savedArticles.push(article);
+      await user.save();
+      res.status(200).json({ msg: "Article saved successfully" });
+    } else {
+      res.status(404).json({ msg: "User not found" });
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
+/* GET saved articles */
+router.get("/:email/articles", async (req, res) => {
+  const { email } = req.params;
+  try {
+    const user = await User.findOne({ email: email });
+    if (user) {
+      res.status(200).json(user.savedArticles);
+    } else {
+      res.status(404).json({ msg: "User not found" });
+    }
+  } catch (err) {
+    res.status(500).send("Server error");
+  }
+});
+
+/* DELETE all saved articles */
+router.delete("/:email/articles", async (req, res) => {
+  const { email } = req.params;
+  try {
+    const user = await User.findOne({ email: email });
+    if (user) {
+      user.savedArticles = [];
+      await user.save();
+      res.status(200).json({ msg: "All articles deleted successfully" });
+    } else {
+      res.status(404).json({ msg: "User not found" });
+    }
+  } catch (err) {
     res.status(500).send("Server error");
   }
 });

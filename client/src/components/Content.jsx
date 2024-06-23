@@ -7,13 +7,15 @@ import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
 import CloseIcon from "@mui/icons-material/Close";
-import { IconButton } from "@mui/material";
+import { IconButton, Button } from "@mui/material";
+import Link from "@mui/material/Link";
+import { addSavedArticle } from "../slices/userSlice";
 
 const categories = [
   "Business",
@@ -28,7 +30,7 @@ const categories = [
 const darkTheme = createTheme({
   palette: { mode: "dark" },
   typography: {
-    fontFamily: "Times New Roman, sans-serif",
+    fontFamily: "Times New Roman",
     h1: {
       fontSize: "2.5rem",
       fontWeight: "bold",
@@ -44,6 +46,7 @@ const darkTheme = createTheme({
 
 const CategoryItem = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
+  fontFamily: "Times New Roman",
   textAlign: "center",
   color: theme.palette.text.primary,
   padding: 80,
@@ -82,6 +85,7 @@ const modalStyle = {
 export default function Content() {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [news, setNews] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
@@ -118,6 +122,30 @@ export default function Content() {
   const handleClose = () => {
     setOpen(false);
     setNews([]);
+  };
+
+  const saveArticle = async (article) => {
+    try {
+      const existingArticle = user.savedArticles.find(
+        (savedArticle) => savedArticle.title === article.title
+      );
+      if (existingArticle) {
+        alert("Article is already saved");
+        return;
+      }
+      await axios.post(`http://localhost:3000/users/${user.email}/articles`, {
+        article: {
+          title: article.title,
+          description: article.description,
+          url: article.url,
+          source: article.source.name,
+        },
+      });
+      dispatch(addSavedArticle(article));
+      alert("Article saved successfully");
+    } catch (error) {
+      console.error("Error saving article:", error);
+    }
   };
 
   return (
@@ -167,8 +195,9 @@ export default function Content() {
           >
             <Typography
               id="modal-modal-title"
-              variant="h4"
+              variant="h3"
               component="h2"
+              sx={{ fontWeight: "bold" }}
               gutterBottom
             >
               {selectedCategory} News
@@ -191,15 +220,38 @@ export default function Content() {
           ) : (
             news.map((article, index) => (
               <Box key={index} mb={3}>
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h5" gutterBottom>
                   {article.title}
                 </Typography>
-                <Typography variant="body2" gutterBottom>
+                <Typography
+                  variant="body2"
+                  sx={{ fontStyle: "italic" }}
+                  gutterBottom
+                >
                   {article.description}
                 </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  {article.source.name}
+                <Typography
+                  variant="body2"
+                  sx={{ fontStyle: "italic" }}
+                  gutterBottom
+                >
+                  Read More:{" "}
+                  <Link href={article.url} target="_blank">
+                    {article.source.name}
+                  </Link>
                 </Typography>
+                <Typography variant="caption" gutterBottom>
+                  Source: {article.source.name}
+                </Typography>
+                <br></br>
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={{ padding: "5px", borderRadius: "35px" }}
+                  onClick={() => saveArticle(article)}
+                >
+                  Save
+                </Button>
                 <Divider sx={{ my: 2 }} />
               </Box>
             ))

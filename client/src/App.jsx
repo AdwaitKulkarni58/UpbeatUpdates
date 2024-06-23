@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import Content from "./components/Content";
 import Layout from "./components/Layout";
 import UserInfo from "./components/Userinfo";
+import Favorites from "./components/Favorites";
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
           <Route path="content" element={<Content />} />
           <Route path="login" element={<Login />} />
           <Route path="account" element={<UserInfo />}>
-            <Route path="faves" element={<div>My Favorites</div>} />
+            <Route path="faves" element={<Favorites />} />
             <Route path="logout" element={<div>Log Out</div>} />
           </Route>
         </Route>
