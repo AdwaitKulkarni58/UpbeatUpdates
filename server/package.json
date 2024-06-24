@@ -16,6 +16,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.7.0",
     "mongoose": "^8.4.1",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "node-nlp": "^4.27.0"
   }
 }

@@ -17,6 +17,9 @@ import { IconButton, Button } from "@mui/material";
 import Link from "@mui/material/Link";
 import { addSavedArticle } from "../slices/userSlice";
 
+import { analyzeSentiment } from "../sentiment/sentimentAnalysis";
+import { categorizeSentiment } from "../sentiment/sentimentAnalysis";
+
 const categories = [
   "Business",
   "Entertainment",
@@ -111,7 +114,15 @@ export default function Content() {
         },
       });
 
-      setNews(response.data.articles.slice(0, 10));
+      const articlesWithSentiment = response.data.articles.map((article) => ({
+        ...article,
+        sentimentScore: analyzeSentiment(article.description),
+        sentimentCategory: categorizeSentiment(
+          analyzeSentiment(article.description)
+        ),
+      }));
+
+      setNews(articlesWithSentiment);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching news:", error);
@@ -224,7 +235,7 @@ export default function Content() {
                   {article.title}
                 </Typography>
                 <Typography
-                  variant="body2"
+                  variant="body1"
                   sx={{ fontStyle: "italic" }}
                   gutterBottom
                 >
@@ -242,6 +253,19 @@ export default function Content() {
                 </Typography>
                 <Typography variant="caption" gutterBottom>
                   Source: {article.source.name}
+                </Typography>
+                <br></br>
+                <Typography
+                  variant="caption"
+                  gutterBottom
+                  sx={{
+                    fontStyle: "italic",
+                    fontWeight: "bold",
+                    fontSize: "1em",
+                  }}
+                >
+                  Sentiment: {article.sentimentCategory} <br></br> Positivity
+                  Score: {article.sentimentScore}
                 </Typography>
                 <br></br>
                 <Button
