@@ -33,11 +33,11 @@ const UserInfo = () => {
     if (!user.loggedIn) {
       navigate("/login");
     }
-  });
+  }, [user.loggedIn, navigate]);
 
   const navItems = [
-    { label: "My Account", path: "/account" },
-    { label: "My Favorites", path: "/account/faves" },
+    { label: "My Account", path: "/app/account" },
+    { label: "My Favorites", path: "/app/account/faves" },
   ];
 
   const deleteAccount = async () => {
@@ -78,9 +78,10 @@ const UserInfo = () => {
             fullWidth
             variant="contained"
             sx={{ marginBottom: 2 }}
-            component={Link}
-            to="/login"
-            onClick={() => dispatch(logout())}
+            onClick={() => {
+              dispatch(logout());
+              navigate("/");
+            }}
           >
             Log Out
           </Button>
@@ -105,7 +106,7 @@ const UserInfo = () => {
           >
             Hello there!
           </Typography>
-          {location.pathname === "/account" && <Account />}
+          {location.pathname === "/app/account" && <Account />}
           <Outlet />
         </Box>
       </Paper>

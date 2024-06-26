@@ -6,18 +6,20 @@ import Content from "./components/Content";
 import Layout from "./components/Layout";
 import UserInfo from "./components/Userinfo";
 import Favorites from "./components/Favorites";
+import Analysis from "./components/Analysis";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<LandingPage />} />
-          <Route path="content" element={<Content />} />
+        <Route path="/" element={<LandingPage />}>
           <Route path="login" element={<Login />} />
+        </Route>
+        <Route path="app" element={<Layout />}>
+          <Route path="content" element={<Content />} />
           <Route path="account" element={<UserInfo />}>
             <Route path="faves" element={<Favorites />} />
-            <Route path="logout" element={<div>Log Out</div>} />
+            <Route path="analysis" element={<Analysis />} />
           </Route>
         </Route>
       </Routes>

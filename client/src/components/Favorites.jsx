@@ -12,6 +12,10 @@ import {
   Button,
 } from "@mui/material";
 import axios from "axios";
+import {
+  analyzeSentiment,
+  categorizeSentiment,
+} from "../sentiment/sentimentAnalysis";
 
 const Favorites = () => {
   const email = useSelector((state) => state.user.email);
@@ -23,7 +27,15 @@ const Favorites = () => {
         const response = await axios.get(
           `http://localhost:3000/users/${email}/articles`
         );
-        setFavorites(response.data);
+
+        const articlesWithSentiment = response.data.map((article) => ({
+          ...article,
+          sentimentScore: analyzeSentiment(article.description),
+          sentimentCategory: categorizeSentiment(
+            analyzeSentiment(article.description)
+          ),
+        }));
+        setFavorites(articlesWithSentiment);
       } catch (error) {
         console.error("Error fetching favorites:", error);
       }
@@ -79,6 +91,18 @@ const Favorites = () => {
                 </Link>
                 <Typography variant="caption" display="block" gutterBottom>
                   Source: {item.source}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  gutterBottom
+                  sx={{
+                    fontStyle: "italic",
+                    fontWeight: "bold",
+                    fontSize: "1em",
+                  }}
+                >
+                  Sentiment: {item.sentimentCategory} <br></br> Positivity
+                  Score: {item.sentimentScore}
                 </Typography>
               </ListItem>
               {index < validFavorites.length - 1 && <Divider />}

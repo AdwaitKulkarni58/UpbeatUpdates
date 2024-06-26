@@ -32,7 +32,7 @@ const Login = () => {
       );
       dispatch(login(user));
       if (response.status === 200) {
-        navigate("/content");
+        navigate("/app/content");
       }
     } catch (err) {
       alert("Please enter the correct credentials");
@@ -87,25 +87,22 @@ const Login = () => {
           autoComplete="current-password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <FormControlLabel
-          control={<Checkbox value="remember" color="primary" />}
-          label="Remember me"
-        />
         <Button
           type="submit"
           fullWidth
           variant="contained"
-          sx={{ mt: 3, mb: 2 }}
+          sx={{
+            mt: 3,
+            mb: 2,
+            width: "13em",
+            marginTop: "4em",
+            borderRadius: "50px",
+            fontSize: "1.2em",
+            padding: "0.5em",
+          }}
         >
           Submit
         </Button>
-        <Grid container>
-          <Grid item xs>
-            <Link href="#" variant="body2" sx={{ fontWeight: "bold" }}>
-              Forgot password?
-            </Link>
-          </Grid>
-        </Grid>
       </Box>
     </Box>
   );

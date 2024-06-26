@@ -114,13 +114,15 @@ export default function Content() {
         },
       });
 
-      const articlesWithSentiment = response.data.articles.map((article) => ({
-        ...article,
-        sentimentScore: analyzeSentiment(article.description),
-        sentimentCategory: categorizeSentiment(
-          analyzeSentiment(article.description)
-        ),
-      }));
+      const articlesWithSentiment = response.data.articles.map((article) => {
+        const description = article.description || "";
+        const sentimentScore = analyzeSentiment(description);
+        return {
+          ...article,
+          sentimentScore,
+          sentimentCategory: categorizeSentiment(sentimentScore),
+        };
+      });
 
       setNews(articlesWithSentiment);
       setLoading(false);

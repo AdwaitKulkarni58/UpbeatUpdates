@@ -35,10 +35,25 @@ function Navbar(props) {
   };
 
   let navItems = [];
-  if (location.pathname === "/account" || location.pathname === "/account/faves") {
-    navItems = [{ label: "Home", path: "/content" }];
-  } else if (loggedIn || location.pathname === "/content") {
-    navItems = [{ label: "Profile", path: "/account" }];
+  if (
+    location.pathname === "/app/account" ||
+    location.pathname === "/app/account/faves"
+  ) {
+    navItems = [
+      { label: "Home", path: "/app/content" },
+      { label: "Analysis", path: "/app/account/analysis" },
+    ];
+  } else if (loggedIn || location.pathname === "/app/content") {
+    navItems = [
+      { label: "Profile", path: "/app/account" },
+      { label: "Analysis", path: "/app/account/analysis" },
+    ];
+  }
+  if (location.pathname === "/app/account/analysis") {
+    navItems = [
+      { label: "Home", path: "/app/content" },
+      { label: "Profile", path: "/app/account" },
+    ];
   }
 
   const drawer = (
