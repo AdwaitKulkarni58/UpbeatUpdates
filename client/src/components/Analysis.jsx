@@ -87,7 +87,7 @@ const Analysis = () => {
         setCategoryData(categoryData);
 
         const favoritesResponse = await axios.get(
-          `https://upbeat-updates-backend.vercel.app/users/${email}/articles`
+          `http://localhost:3000/users/${email}/articles`
         );
         const favoritesWithSentiment = favoritesResponse.data.map((article) => {
           const description = article.description || "";

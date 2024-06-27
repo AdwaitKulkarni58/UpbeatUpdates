@@ -27,17 +27,10 @@ const Login = () => {
     try {
       const user = { email, password };
       const response = await axios.post(
-        "https://upbeat-updates-backend.vercel.app/users/login",
-        user,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-        }
+        "http://localhost:3000/users/login",
+        user
       );
       dispatch(login(user));
-      console.log(response);
       if (response.status === 200) {
         navigate("/app/content");
       }

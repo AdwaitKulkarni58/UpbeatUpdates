@@ -27,7 +27,7 @@ const Account = () => {
     }
     const user = { email: email, password: password };
     try {
-      const url = `https://upbeat-updates-backend.vercel.app/users/${email}`;
+      const url = `http://localhost:3000/users/${email}`;
       const response = await axios.put(url, user);
       dispatch(
         editUser({

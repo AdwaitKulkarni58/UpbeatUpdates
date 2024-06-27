@@ -28,7 +28,7 @@ const Favorites = () => {
     const getFavorites = async () => {
       try {
         const response = await axios.get(
-          `https://upbeat-updates-backend.vercel.app/users/${email}/articles`
+          `http://localhost:3000/users/${email}/articles`
         );
 
         const articlesWithSentiment = response.data.map((article) => ({
@@ -50,9 +50,7 @@ const Favorites = () => {
 
   const clearFavorites = async () => {
     try {
-      await axios.delete(
-        `https://upbeat-updates-backend.vercel.app/users/${email}/articles`
-      );
+      await axios.delete(`http://localhost:3000/users/${email}/articles`);
       setFavorites([]);
     } catch (error) {
       console.error("Error clearing favorites:", error);
@@ -61,9 +59,7 @@ const Favorites = () => {
 
   const deleteFavorite = async (id) => {
     try {
-      await axios.delete(
-        `https://upbeat-updates-backend.vercel.app/users/${email}/articles/${id}`
-      );
+      await axios.delete(`http://localhost:3000/users/${email}/articles/${id}`);
       dispatch(deleteArticle(id));
       const updatedFavorites = favorites.filter((item) => item._id !== id);
       setFavorites(updatedFavorites);

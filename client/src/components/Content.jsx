@@ -147,7 +147,7 @@ export default function Content() {
         return;
       }
       const response = await axios.post(
-        `https://upbeat-updates-backend.vercel.app/users/${user.email}/articles`,
+        `http://localhost:3000/users/${user.email}/articles`,
         {
           article: {
             title: article.title,
