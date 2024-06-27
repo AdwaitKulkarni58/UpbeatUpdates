@@ -45,9 +45,10 @@ const About = () => {
         }}
       >
         The mission is simple: to spread positivity and joy by showcasing the
-        best of humanity. From acts of kindness and breakthroughs in science and
-        medicine, to achievements in sports and entertainment, we curate content
-        that will brighten your day and remind you of the good in the world.
+        best of humanity. We know that the world is full of negative news and
+        news channels like to focus on that for views, but we want to give back
+        control to the people by letting them decide what to read and what not
+        to read.
       </Typography>
       <Typography
         variant="body1"
@@ -61,8 +62,8 @@ const About = () => {
       >
         Whether you're interested in politics, sports, entertainment, or just
         want to read about the latest feel-good stories, we've got you covered.
-        Every piece of news we share is not only positive but also verified and
-        reliable.
+        Using a reliable sentiment analysis method, we make sure that the
+        positivity rating of each article is accurate and precise.
       </Typography>
       <Typography
         variant="body1"
@@ -74,10 +75,11 @@ const About = () => {
           fontStyle: "italic",
         }}
       >
-        We believe that by focusing on positive news, we can inspire our readers
-        to look for the good in their own lives and communities. Join us in our
-        mission to make the world a happier place, one positive news story at a
-        time.
+        We also offer additional features like viewing the positivity trends of
+        different news categories and allowing you to see how your favorite
+        articles compare to others. Using modern clustering algorithms, we
+        construct real-time, easy-to-read charts that showcase your net
+        positivity. with color coding for better interpretations.
       </Typography>
       <Typography
         variant="body1"
