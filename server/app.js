@@ -10,6 +10,8 @@ var usersRouter = require("./routes/users");
 
 var app = express();
 
+app.options("*", cors());
+
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
@@ -50,10 +52,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-
-app.options("*", function (req, res) {
-  res.sendStatus(200);
-});
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
