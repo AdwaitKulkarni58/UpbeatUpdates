@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   List,
@@ -16,10 +16,13 @@ import {
   analyzeSentiment,
   categorizeSentiment,
 } from "../sentiment/sentimentAnalysis";
+import { deleteArticle } from "../slices/userSlice";
 
 const Favorites = () => {
   const email = useSelector((state) => state.user.email);
   const [favorites, setFavorites] = useState([]);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getFavorites = async () => {
@@ -43,12 +46,25 @@ const Favorites = () => {
     getFavorites();
   }, [email]);
 
+  console.log(favorites);
+
   const clearFavorites = async () => {
     try {
       await axios.delete(`http://localhost:3000/users/${email}/articles`);
       setFavorites([]);
     } catch (error) {
       console.error("Error clearing favorites:", error);
+    }
+  };
+
+  const deleteFavorite = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3000/users/${email}/articles/${id}`);
+      dispatch(deleteArticle(id));
+      const updatedFavorites = favorites.filter((item) => item._id !== id);
+      setFavorites(updatedFavorites);
+    } catch (error) {
+      console.error("Error deleting favorite:", error);
     }
   };
 
@@ -65,7 +81,7 @@ const Favorites = () => {
         </Typography>
         <List>
           {validFavorites.map((item, index) => (
-            <React.Fragment key={index}>
+            <React.Fragment key={index} id={item._id}>
               <ListItem
                 sx={{
                   display: "flex",
@@ -104,6 +120,15 @@ const Favorites = () => {
                   Sentiment: {item.sentimentCategory} <br></br> Positivity
                   Score: {item.sentimentScore}
                 </Typography>
+                <Box>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => deleteFavorite(item._id)}
+                  >
+                    Clear
+                  </Button>
+                </Box>
               </ListItem>
               {index < validFavorites.length - 1 && <Divider />}
             </React.Fragment>

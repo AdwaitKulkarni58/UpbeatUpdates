@@ -38,10 +38,17 @@ const userSlice = createSlice({
       if (!existingArticle) {
         state.savedArticles.push(action.payload);
       }
+      localStorage.setItem("user", JSON.stringify(state));
+    },
+    deleteArticle: (state, action) => {
+      state.savedArticles = state.savedArticles.filter(
+        (article) => article._id !== action.payload
+      );
+      localStorage.setItem("user", JSON.stringify(state));
     },
   },
 });
 
-export const { login, logout, editUser, addSavedArticle } = userSlice.actions;
+export const { login, logout, editUser, addSavedArticle, deleteArticle } = userSlice.actions;
 
 export default userSlice.reducer;

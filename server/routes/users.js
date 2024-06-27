@@ -16,40 +16,40 @@ const connect = () => {
 
 connect();
 
-const userSchema = new mongoose.Schema(
-  {
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    savedArticles: [
-      {
-        title: {
-          type: String,
-          required: true,
-        },
-        description: {
-          type: String,
-          required: true,
-        },
-        url: {
-          type: String,
-          required: true,
-        },
-        source: {
-          type: String,
-          required: true,
-        },
-      },
-    ],
+const userSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    required: true,
+    unique: true,
   },
-  { _id: false }
-);
+  password: {
+    type: String,
+    required: true,
+  },
+  savedArticles: [
+    {
+      title: {
+        type: String,
+        required: true,
+      },
+      description: {
+        type: String,
+        required: true,
+      },
+      url: {
+        type: String,
+        required: true,
+      },
+      source: {
+        type: String,
+        required: true,
+      },
+    },
+    {
+      _id: true,
+    },
+  ],
+});
 
 const User = mongoose.model("User", userSchema);
 
@@ -132,14 +132,12 @@ router.post("/:email/articles", async (req, res) => {
     return res.status(400).json({ msg: "Invalid article data" });
   }
   try {
-    const user = await User.findOne({ email: email });
-    if (user) {
-      user.savedArticles.push(article);
-      await user.save();
-      res.status(200).json({ msg: "Article saved successfully" });
-    } else {
-      res.status(404).json({ msg: "User not found" });
-    }
+    const user = await User.findOne({ email });
+    user.savedArticles.push(article);
+    await user.save();
+
+    const savedArticle = user.savedArticles[user.savedArticles.length - 1];
+    res.status(201).json({ article: savedArticle });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
@@ -174,6 +172,34 @@ router.delete("/:email/articles", async (req, res) => {
       res.status(404).json({ msg: "User not found" });
     }
   } catch (err) {
+    res.status(500).send("Server error");
+  }
+});
+
+/* DELETE saved article */
+router.delete("/:email/articles/:id", async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.params.email });
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // Find the index of the article to be deleted
+    const articleIndex = user.savedArticles.findIndex(
+      (article) => article._id.toString() === req.params.id
+    );
+
+    if (articleIndex === -1) {
+      return res.status(404).json({ msg: "Article not found" });
+    }
+
+    user.savedArticles.splice(articleIndex, 1);
+
+    await user.save();
+
+    res.status(200).json({ msg: "Article deleted successfully" });
+  } catch (err) {
+    console.error(err.message);
     res.status(500).send("Server error");
   }
 });

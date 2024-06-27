@@ -146,7 +146,7 @@ export default function Content() {
         alert("Article is already saved");
         return;
       }
-      await axios.post(`http://localhost:3000/users/${user.email}/articles`, {
+      const response = await axios.post(`http://localhost:3000/users/${user.email}/articles`, {
         article: {
           title: article.title,
           description: article.description,
@@ -154,7 +154,8 @@ export default function Content() {
           source: article.source.name,
         },
       });
-      dispatch(addSavedArticle(article));
+      const savedArticle = response.data.article;
+      dispatch(addSavedArticle(savedArticle));
       alert("Article saved successfully");
     } catch (error) {
       console.error("Error saving article:", error);
