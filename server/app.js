@@ -51,7 +51,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.options("*", cors());
+app.options("*", function (req, res) {
+  res.sendStatus(200);
+});
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
