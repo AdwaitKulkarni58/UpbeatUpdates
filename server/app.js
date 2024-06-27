@@ -9,7 +9,6 @@ var usersRouter = require("./routes/users");
 
 var app = express();
 
-app.use(cors());
 app.use(
   cors({
     origin: "https://upbeat-updates.vercel.app/",
