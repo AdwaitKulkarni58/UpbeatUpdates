@@ -16,9 +16,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import { IconButton, Button } from "@mui/material";
 import Link from "@mui/material/Link";
 import { addSavedArticle } from "../slices/userSlice";
+import { v4 as uuidv4 } from "uuid";
 
 import { analyzeSentiment } from "../sentiment/sentimentAnalysis";
 import { categorizeSentiment } from "../sentiment/sentimentAnalysis";
+import ShareIcon from "@mui/icons-material/Share";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 
 const categories = [
   "Business",
@@ -119,6 +123,7 @@ export default function Content() {
         const sentimentScore = analyzeSentiment(description);
         return {
           ...article,
+          id: uuidv4(),
           sentimentScore,
           sentimentCategory: categorizeSentiment(sentimentScore),
         };
@@ -163,6 +168,28 @@ export default function Content() {
     } catch (error) {
       console.error("Error saving article:", error);
     }
+  };
+
+  const handleShare = (platform, url, title) => {
+    const shareUrl = encodeURIComponent(url);
+    const text = encodeURIComponent(`Check out this article: ${title}`);
+    let finalUrl;
+
+    switch (platform) {
+      case "twitter":
+        finalUrl = `https://twitter.com/intent/tweet?url=${shareUrl}&text=${text}`;
+        break;
+      case "facebook":
+        finalUrl = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
+        break;
+      case "linkedin":
+        finalUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${text}`;
+        break;
+      default:
+        return;
+    }
+
+    window.open(finalUrl, "_blank");
   };
 
   return (
@@ -236,7 +263,7 @@ export default function Content() {
             </Box>
           ) : (
             news.map((article, index) => (
-              <Box key={index} mb={3}>
+              <Box key={index} id={article.id} mb={3}>
                 <Typography variant="h5" gutterBottom>
                   {article.title}
                 </Typography>
@@ -281,6 +308,36 @@ export default function Content() {
                   onClick={() => saveArticle(article)}
                 >
                   Save
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  sx={{ padding: "5px", borderRadius: "35px", ml: 2 }}
+                  onClick={() =>
+                    handleShare("twitter", article.url, article.title)
+                  }
+                >
+                  <ShareIcon /> Twitter
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  sx={{ padding: "5px", borderRadius: "35px", ml: 2 }}
+                  onClick={() =>
+                    handleShare("facebook", article.url, article.title)
+                  }
+                >
+                  <ShareIcon /> Facebook
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  sx={{ padding: "5px", borderRadius: "35px", ml: 2 }}
+                  onClick={() =>
+                    handleShare("linkedin", article.url, article.title)
+                  }
+                >
+                  <ShareIcon /> LinkedIn
                 </Button>
                 <Divider sx={{ my: 2 }} />
               </Box>
