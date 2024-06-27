@@ -11,7 +11,7 @@ var app = express();
 
 app.use(
   cors({
-    origin: "https://upbeat-updates.vercel.app/",
+    origin: "https://upbeat-updates.vercel.app",
   })
 );
 app.use(logger("dev"));
