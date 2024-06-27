@@ -126,7 +126,7 @@ const Favorites = () => {
                     color="secondary"
                     onClick={() => deleteFavorite(item._id)}
                   >
-                    Clear
+                    Remove
                   </Button>
                 </Box>
               </ListItem>
@@ -142,7 +142,7 @@ const Favorites = () => {
             color="secondary"
             onClick={clearFavorites}
           >
-            Clear
+            Clear All
           </Button>
         )}
       </Paper>
