@@ -11,6 +11,7 @@ var usersRouter = require("./routes/users");
 var app = express();
 
 app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
