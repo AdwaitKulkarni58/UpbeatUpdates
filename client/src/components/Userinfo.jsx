@@ -47,7 +47,7 @@ const UserInfo = () => {
       )
     ) {
       try {
-        const url = `http://localhost:3000/users/${email}`;
+        const url = `https://upbeat-updates-backend.vercel.app/users/${email}`;
         await axios.delete(url);
         dispatch(logout());
         navigate("/");

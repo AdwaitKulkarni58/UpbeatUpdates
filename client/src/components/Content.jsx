@@ -146,14 +146,17 @@ export default function Content() {
         alert("Article is already saved");
         return;
       }
-      const response = await axios.post(`http://localhost:3000/users/${user.email}/articles`, {
-        article: {
-          title: article.title,
-          description: article.description,
-          url: article.url,
-          source: article.source.name,
-        },
-      });
+      const response = await axios.post(
+        `https://upbeat-updates-backend.vercel.app/users/${user.email}/articles`,
+        {
+          article: {
+            title: article.title,
+            description: article.description,
+            url: article.url,
+            source: article.source.name,
+          },
+        }
+      );
       const savedArticle = response.data.article;
       dispatch(addSavedArticle(savedArticle));
       alert("Article saved successfully");
