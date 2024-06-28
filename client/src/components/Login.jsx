@@ -27,7 +27,7 @@ const Login = () => {
     try {
       const user = { email, password };
       const response = await axios.post(
-        "http://localhost:3000/users/login",
+        "https://upbeat-updates-backend.vercel.app/users/login",
         user
       );
       dispatch(login(user));
