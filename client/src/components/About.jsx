@@ -45,7 +45,7 @@ const About = () => {
         }}
       >
         The mission is simple: to spread positivity and joy by showcasing the
-        best of humanity. We know that the world is full of negative news and
+        best of humanity. We know that the world is full of negativity and
         news channels like to focus on that for views, but we want to give back
         control to the people by letting them decide what to read and what not
         to read.
