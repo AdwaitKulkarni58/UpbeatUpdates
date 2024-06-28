@@ -214,7 +214,28 @@ export default function Content() {
                 onClick={() => handleCategoryClick(category)}
                 sx={{ width: "50%" }}
               >
-                <CategoryItem elevation={7}>
+                <CategoryItem
+                  elevation={7}
+                  sx={{
+                    "&:hover": {
+                      transform: "scale(1.05)",
+                      cursor: "pointer",
+                      outline: "none",
+                      backgroundColor: "#6FDCE3",
+                      color: "black",
+                      boxShadow: "0 0 10px #6FDCE3",
+                      transition: "all 0.1s ease",
+                      borderRadius: "10px",
+                      border: "1px solid #6FDCE3",
+                      textAlign: "center",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      fontWeight: "bold",
+                      fontFamily: "Times New Roman",
+                    },
+                  }}
+                >
                   <Typography variant="h1">{category}</Typography>
                 </CategoryItem>
               </ButtonBase>
