@@ -19,6 +19,7 @@ const allowedOrigins = [
   "https://upbeat-updates.vercel.app",
   "http://localhost:5173",
   "https://upbeatupdates.onrender.com",
+  "https://upbeatupdates.onrender.com/users/login",
   "https://upbeatupdates-1.onrender.com/users/login",
   "https://upbeatupdates-1.onrender.com",
 ];
