@@ -27,7 +27,7 @@ const Account = () => {
     }
     const user = { email: email, password: password };
     try {
-      const url = `http://localhost:3000/users/${email}`;
+      const url = `https://upbeatupdates.onrender.com/${email}`;
       const response = await axios.put(url, user);
       dispatch(
         editUser({

@@ -87,7 +87,7 @@ const Analysis = () => {
         setCategoryData(categoryData);
 
         const favoritesResponse = await axios.get(
-          `http://localhost:3000/users/${email}/articles`
+          `https://upbeatupdates.onrender.com/users/${email}/articles`
         );
         const favoritesWithSentiment = favoritesResponse.data.map((article) => {
           const description = article.description || "";

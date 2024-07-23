@@ -47,7 +47,7 @@ const UserInfo = () => {
       )
     ) {
       try {
-        const url = `http://localhost:3000/users/${email}`;
+        const url = `https://upbeatupdates.onrender.com/users/${email}`;
         await axios.delete(url);
         dispatch(logout());
         navigate("/");

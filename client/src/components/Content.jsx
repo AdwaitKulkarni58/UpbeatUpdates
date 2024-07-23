@@ -21,8 +21,6 @@ import { v4 as uuidv4 } from "uuid";
 import { analyzeSentiment } from "../sentiment/sentimentAnalysis";
 import { categorizeSentiment } from "../sentiment/sentimentAnalysis";
 import ShareIcon from "@mui/icons-material/Share";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 
 const categories = [
   "Business",
@@ -152,7 +150,7 @@ export default function Content() {
         return;
       }
       const response = await axios.post(
-        `http://localhost:3000/users/${user.email}/articles`,
+        `https://upbeatupdates.onrender.com/users/${user.email}/articles`,
         {
           article: {
             title: article.title,

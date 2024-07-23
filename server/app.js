@@ -18,6 +18,7 @@ app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 const allowedOrigins = [
   "https://upbeat-updates.vercel.app",
   "http://localhost:5173",
+  "https://upbeatupdates.onrender.com",
 ];
 
 app.use((req, res, next) => {

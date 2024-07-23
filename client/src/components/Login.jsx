@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  Avatar,
-  Button,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Link,
-  Grid,
-  Box,
-  Typography,
-} from "@mui/material";
+import { Avatar, Button, TextField, Box, Typography } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -27,7 +17,7 @@ const Login = () => {
     try {
       const user = { email, password };
       const response = await axios.post(
-        "https://upbeat-updates-backend.vercel.app/users/login",
+        "https://upbeatupdates.onrender.com/users/login",
         user
       );
       dispatch(login(user));

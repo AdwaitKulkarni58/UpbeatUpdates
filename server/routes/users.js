@@ -1,7 +1,6 @@
 var express = require("express");
 var router = express.Router();
 var bcrypt = require("bcrypt");
-var jwt = require("jsonwebtoken");
 var mongoose = require("mongoose");
 require("dotenv").config();
 
@@ -54,12 +53,12 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model("User", userSchema);
 
 /* GET users listing. */
-router.get("/", function (req, res, next) {
+router.get("/", function (req, res) {
   res.send("respond with a resource");
 });
 
 /* POST user login. */
-router.post("/login", async function (req, res, next) {
+router.post("/login", async function (req, res) {
   const { email, password } = req.body;
 
   try {
